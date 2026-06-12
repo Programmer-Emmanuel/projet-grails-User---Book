@@ -11,6 +11,7 @@ class UserController {
 
     def register(){
         try {
+            // @TODO/ Evite def
             def json = request.JSON
 
             UserDto dto = new UserDto(
@@ -19,7 +20,7 @@ class UserController {
                     phone: json.phone,
                     password: json.password
             )
-
+            // @TODO/ Evite def
             def response = userService.register(dto)
 
             respond([
@@ -41,6 +42,7 @@ class UserController {
     @Secured(['ROLE_USER'])
     def info(){
         try{
+            // @TODO/ Evite def
             def user = userService.info()
 
             respond([
@@ -61,6 +63,7 @@ class UserController {
     @Secured(["ROLE_USER"])
     def update(){
         try{
+            // @TODO/ Evite def
             def json = request.JSON
             UserDto dto = new UserDto(
                     name : json.name,
