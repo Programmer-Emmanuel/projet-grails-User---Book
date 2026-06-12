@@ -12,12 +12,13 @@ class BookController {
     @Secured(["ROLE_USER"])
     def save(){
         try{
+            // Evite def utilise le typage statique(ça permet à n'importe qui de comprendre facilement ton code)
             def json = request.JSON
             BookDto dto = new BookDto(
                     title: json.title,
                     pages_number: json.pages_number
             )
-
+            // Evite def
             def response = bookService.save(dto)
 
             respond([
@@ -78,6 +79,7 @@ class BookController {
     @Secured(["ROLE_USER"])
     def update(Long id){
         try{
+            // Evite le def
             def json = request.JSON
 
             BookDto dto = new BookDto(
