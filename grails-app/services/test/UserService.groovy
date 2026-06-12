@@ -34,6 +34,7 @@ class UserService {
         }
 
         UserRole.create(user, role, true)
+
         println user.errors
 
         def userDetails = userDetailsService.loadUserByUsername(user.username)
@@ -49,10 +50,11 @@ class UserService {
         )
 
     }
-
+    // @TODO: Mauvais nommage, c'est l'utilisateur connecté que tu récupère donc getAuthenticatedUser
     User getUser(){
+        // @TODO: Evit def
         def auth = SecurityContextHolder.context.authentication?.name
-
+        // @TODO: Evit def
         def user = User.findByUsername(auth)
         if(!user){
             throw RuntimeException("Utilisateur introuvable")
@@ -61,8 +63,9 @@ class UserService {
         return user
     }
 
+    // @TODO: Mauvais nommage
     UserResponseDto info(){
-
+        // @TODO: Evit def
         def user = getUser()
 
         return new UserResponseDto(
@@ -75,7 +78,7 @@ class UserService {
     }
 
     UserResponseDto update(UserDto dto){
-
+        // @TODO: Evit def
         def user = getUser()
 
         user.name = dto.name ?: user.name
