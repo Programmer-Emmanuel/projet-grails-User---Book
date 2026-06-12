@@ -10,6 +10,7 @@ class BookService {
     UserService userService
 
     BookResponseDto save(BookDto dto){
+        // @TODO: Evite le def
         def user = userService.getUser()
 
         Book book = new Book(
@@ -44,14 +45,16 @@ class BookService {
         }
     }
 
+    // Mauvais nommage, getBookByIdAndUser et tu passes le user dépuis le controller
     Book getBookUser(Long id){
         def user = userService.getUser()
-
+            // @TODO: supprime
 //        def book = Book.where{
 //            user == user
 //            id == id
 //        }.get()
 
+        // @TODO: Evit def
         def book = Book.findByIdAndUser(id, user)
 
         if(!book){
@@ -61,9 +64,12 @@ class BookService {
         return book
     }
 
+    // @TODO: Mauvais nommage, getById
     BookResponseDto show(Long id){
-
+        // @TODO: Evit def
         def book = getBookUser(id)
+
+        // @TODO L'exception ??
 
         return new BookResponseDto(
                 id: book.id,
@@ -74,8 +80,9 @@ class BookService {
     }
 
     BookResponseDto update(BookDto dto, Long id){
+        // @TODO: Evit def
         def book = getBookUser(id)
-
+        
         if(dto.title != null){
             book.title = dto.title
         }
@@ -92,7 +99,9 @@ class BookService {
         )
     }
 
+    // @TODO: Mauvais nommage, deleteById
     void delete(Long id){
+        // @TODO: Evit def
         def book = getBookUser(id)
         book.delete(flush: true, failOnError: true)
     }
