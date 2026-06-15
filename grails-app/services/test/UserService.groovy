@@ -3,8 +3,10 @@ package test
 import dto.UserDto
 import dto.UserResponseDto
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.rest.token.AccessToken
 import grails.plugin.springsecurity.rest.token.generation.TokenGenerator
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 
 
@@ -37,8 +39,8 @@ class UserService {
 
         println user.errors
 
-        def userDetails = userDetailsService.loadUserByUsername(user.username)
-        def accessToken = tokenGenerator.generateAccessToken(userDetails)
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.username)
+        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
 
         return new UserResponseDto(
                 id: user.id,
@@ -50,11 +52,8 @@ class UserService {
         )
 
     }
-    // @TODO: Mauvais nommage, c'est l'utilisateur connecté que tu récupère donc getAuthenticatedUser
-    User getUser(){
-        // @TODO: Evit def
-        def auth = SecurityContextHolder.context.authentication?.name
-        // @TODO: Evit def
+    User getAuthenticatedUser(){
+        String auth = SecurityContextHolder.context.authentication?.name
         def user = User.findByUsername(auth)
         if(!user){
             throw RuntimeException("Utilisateur introuvable")
@@ -63,10 +62,8 @@ class UserService {
         return user
     }
 
-    // @TODO: Mauvais nommage
-    UserResponseDto info(){
-        // @TODO: Evit def
-        def user = getUser()
+    UserResponseDto getUserInfo(){
+        User user = getAuthenticatedUser()
 
         return new UserResponseDto(
                 id: user.id,
@@ -78,8 +75,7 @@ class UserService {
     }
 
     UserResponseDto update(UserDto dto){
-        // @TODO: Evit def
-        def user = getUser()
+        User user = getAuthenticatedUser()
 
         user.name = dto.name ?: user.name
         user.username = dto.username ?: user.username

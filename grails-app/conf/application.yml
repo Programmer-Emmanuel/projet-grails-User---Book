@@ -23,10 +23,10 @@ grails:
       accept:
         header:
           userAgents:
-          - Gecko
-          - WebKit
-          - Presto
-          - Trident
+            - Gecko
+            - WebKit
+            - Presto
+            - Trident
     types:
       all: '*/*'
       atom: application/atom+xml
@@ -34,22 +34,22 @@ grails:
       csv: text/csv
       form: application/x-www-form-urlencoded
       html:
-      - text/html
-      - application/xhtml+xml
+        - text/html
+        - application/xhtml+xml
       js: text/javascript
       json:
-      - application/json
-      - text/json
+        - application/json
+        - text/json
       multipartForm: multipart/form-data
       pdf: application/pdf
       rss: application/rss+xml
       text: text/plain
       hal:
-      - application/hal+json
-      - application/hal+xml
+        - application/hal+json
+        - application/hal+xml
       xml:
-      - text/xml
-      - application/xml
+        - text/xml
+        - application/xml
   plugin:
     springsecurity:
       securityConfigType: InterceptUrlMap
@@ -103,17 +103,17 @@ environments:
   development:
     dataSource:
       dbCreate: update
-      url: jdbc:mariadb://localhost:58602/test
+      url: jdbc:mariadb://localhost:60027/test
       dialect: org.hibernate.dialect.MariaDBDialect
   test:
     dataSource:
       dbCreate: update
-      url: jdbc:mariadb://localhost:58602/test
+      url: jdbc:mariadb://localhost:60027/test
       dialect: org.hibernate.dialect.MariaDBDialect
   production:
     dataSource:
       dbCreate: none
-      url: jdbc:mariadb://localhost:58602/test
+      url: jdbc:mariadb://localhost:60027/test
       dialect: org.hibernate.dialect.MariaDBDialect
       properties:
         jmxEnabled: true

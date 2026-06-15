@@ -3,6 +3,6 @@ package dto
 class BookResponseDto {
     Long id
     String title
-    Long pages_number
+    Long pagesNumber
     String user
 }

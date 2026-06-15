@@ -1,6 +1,8 @@
 package test
 
 import dto.UserDto
+import dto.UserResponseDto
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {
@@ -11,8 +13,7 @@ class UserController {
 
     def register(){
         try {
-            // @TODO/ Evite def
-            def json = request.JSON
+            Map<String, Object> json = request.JSON
 
             UserDto dto = new UserDto(
                     username: json.username,
@@ -20,8 +21,7 @@ class UserController {
                     phone: json.phone,
                     password: json.password
             )
-            // @TODO/ Evite def
-            def response = userService.register(dto)
+            UserResponseDto response = userService.register(dto)
 
             respond([
                     status: 1,
@@ -42,8 +42,7 @@ class UserController {
     @Secured(['ROLE_USER'])
     def info(){
         try{
-            // @TODO/ Evite def
-            def user = userService.info()
+            UserResponseDto user = userService.getUserInfo()
 
             respond([
                     status: 1,
@@ -63,14 +62,13 @@ class UserController {
     @Secured(["ROLE_USER"])
     def update(){
         try{
-            // @TODO/ Evite def
-            def json = request.JSON
+            Map<String, Object> json = request.JSON
             UserDto dto = new UserDto(
                     name : json.name,
                     username: json.username,
                     phone: json.phone
             )
-            def user = userService.update(dto)
+            UserResponseDto user = userService.update(dto)
 
             respond([
                     status: 1,

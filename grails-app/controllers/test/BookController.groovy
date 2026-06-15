@@ -1,6 +1,8 @@
 package test
 
 import dto.BookDto
+import dto.BookResponseDto
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 class BookController {
@@ -12,14 +14,12 @@ class BookController {
     @Secured(["ROLE_USER"])
     def save(){
         try{
-            // Evite def utilise le typage statique(ça permet à n'importe qui de comprendre facilement ton code)
-            def json = request.JSON
+            Map<String, Object> json = request.JSON
             BookDto dto = new BookDto(
                     title: json.title,
-                    pages_number: json.pages_number
+                    pagesNumber: json.pagesNumber
             )
-            // Evite def
-            def response = bookService.save(dto)
+            BookResponseDto response = bookService.save(dto)
 
             respond([
                     status: 1,
@@ -39,7 +39,7 @@ class BookController {
     @Secured(["ROLE_USER"])
     def index(){
         try{
-            def books = bookService.index()
+            List<BookResponseDto> books = bookService.index()
 
             respond([
                     status: 1,
@@ -59,7 +59,7 @@ class BookController {
     @Secured(["ROLE_USER"])
     def show (Long id){
         try{
-            def book = bookService.show(id)
+            BookResponseDto book = bookService.getById(id)
 
             respond([
                     status: 1,
@@ -79,15 +79,14 @@ class BookController {
     @Secured(["ROLE_USER"])
     def update(Long id){
         try{
-            // Evite le def
-            def json = request.JSON
+            Map<String, Object> json = request.JSON
 
             BookDto dto = new BookDto(
                     title: json.title,
-                    pages_number: json.pages_number
+                    pagesNumber: json.pagesNumber
             )
 
-            def response = bookService.update(dto, id)
+            BookResponseDto response = bookService.update(dto, id)
 
             respond([
                     status: 1,
@@ -107,7 +106,7 @@ class BookController {
     @Secured(["ROLE_USER"])
     def delete(Long id){
         try{
-            bookService.delete(id)
+            bookService.deleteById(id)
             respond([
                     status: 1,
                     message: "Livre supprimé avec succès"

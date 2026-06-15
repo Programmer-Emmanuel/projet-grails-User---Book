@@ -10,12 +10,11 @@ class BookService {
     UserService userService
 
     BookResponseDto save(BookDto dto){
-        // @TODO: Evite le def
-        def user = userService.getUser()
+        User user = userService.getAuthenticatedUser()
 
         Book book = new Book(
                 title: dto.title,
-                pages_number: dto.pages_number,
+                pagesNumber: dto.pagesNumber,
                 user: user
         )
 
@@ -24,38 +23,30 @@ class BookService {
         return new BookResponseDto(
                 id: book.id,
                 title: book.title,
-                pages_number: book.pages_number,
+                pagesNumber: book.pagesNumber,
                 user: user.name
         )
     }
 
     List<BookResponseDto> index(){
 
-        def user = userService.getUser()
+        User user = userService.getAuthenticatedUser()
 
-        def books = Book.findAllByUser(user)
+        List<Book> books = Book.findAllByUser(user)
 
         return books.collect { book ->
             new BookResponseDto(
                     id: book.id,
                     title: book.title,
-                    pages_number: book.pages_number,
+                    pagesNumber: book.pagesNumber,
                     user: user.name
             )
         }
     }
 
-    // Mauvais nommage, getBookByIdAndUser et tu passes le user dépuis le controller
-    Book getBookUser(Long id){
-        def user = userService.getUser()
-            // @TODO: supprime
-//        def book = Book.where{
-//            user == user
-//            id == id
-//        }.get()
-
-        // @TODO: Evit def
-        def book = Book.findByIdAndUser(id, user)
+    Book getBookByIdAndUser(Long id){
+        User user = userService.getAuthenticatedUser()
+        Book book = Book.findByIdAndUser(id, user)
 
         if(!book){
             throw RuntimeException("Livre introuvable")
@@ -64,45 +55,42 @@ class BookService {
         return book
     }
 
-    // @TODO: Mauvais nommage, getById
-    BookResponseDto show(Long id){
-        // @TODO: Evit def
-        def book = getBookUser(id)
+    BookResponseDto getById(Long id){
+        Book book = getBookByIdAndUser(id)
 
-        // @TODO L'exception ??
+        if(!book){
+            throw RuntimeException("Livre introuvable")
+        }
 
         return new BookResponseDto(
                 id: book.id,
                 title: book.title,
-                pages_number: book.pages_number,
+                pagesNumber: book.pagesNumber,
                 user: book.user.name
         )
     }
 
     BookResponseDto update(BookDto dto, Long id){
-        // @TODO: Evit def
-        def book = getBookUser(id)
+        Book book = getBookByIdAndUser(id)
         
         if(dto.title != null){
             book.title = dto.title
         }
-        if(dto.pages_number != null){
-            book.pages_number = dto.pages_number
+        if(dto.pagesNumber != null){
+            book.pagesNumber = dto.pagesNumber
         }
         book.save(flush: true, failOnError: true)
 
         return new BookResponseDto(
                 id: book.id,
                 title: book.title,
-                pages_number: book.pages_number,
+                pagesNumber: book.pagesNumber,
                 user: book.user.name
         )
     }
 
-    // @TODO: Mauvais nommage, deleteById
-    void delete(Long id){
-        // @TODO: Evit def
-        def book = getBookUser(id)
+    void deleteById(Long id){
+        Book book = getBookByIdAndUser(id)
         book.delete(flush: true, failOnError: true)
     }
 }
